@@ -1,0 +1,2 @@
+# DIGITAL TUG OF WAR
+Digital Tug of War is an interactive two-player game built with an Arduino and digital logic. Players use separate buttons to move a marker along a nine-LED track. The marker begins at the centre, and the first player to move it to their side’s endpoint wins. The physical build uses a 74LS193 up/down counter to track the game position. Since that IC was unavailable in Tinkercad, the simulation represents the counter using flip-flops and basic logic gates. The project combines hardware counting, Arduino control, visual feedback, and an audible win signal.
