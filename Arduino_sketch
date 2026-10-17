@@ -1,0 +1,44 @@
+const byte qPins[4] = {2, 3, 4, 5};       // Q0, Q1, Q2, Q3
+const byte ledPins[11] = {6, 7, 8, 9, 10, 11, 12, 13, A0, A1, A2};
+const byte leftWinPin = A3;
+const byte rightWinPin = A4;
+const byte buzzerPin = A5;
+bool wasAtWin = false;
+
+// LED positions, left to right
+const byte states[11] = {
+  0b1011, 0b1100, 0b1101, 0b1110, 0b1111,
+  0b0000,
+  0b0001, 0b0010, 0b0011, 0b0100, 0b0101
+};
+
+void setup() {
+  for (byte i = 0; i < 4; i++) pinMode(qPins[i], INPUT);
+  for (byte i = 0; i < 11; i++) pinMode(ledPins[i], OUTPUT);
+  pinMode(leftWinPin, OUTPUT);
+  pinMode(rightWinPin, OUTPUT);
+  pinMode(buzzerPin, OUTPUT); 
+}
+
+void loop() {
+  delay(5);  // let the ripple counter settle
+
+  byte count = 0;
+  for (byte bit = 0; bit < 4; bit++) {
+    count |= digitalRead(qPins[bit]) << bit; 
+  }
+  digitalWrite(leftWinPin,  count == 0b1011 ? HIGH : LOW);
+  digitalWrite(rightWinPin, count == 0b0101 ? HIGH : LOW);
+  
+  bool atWin = (count == 0b1011 || count == 0b0101);
+
+  if (atWin && !wasAtWin) {
+    tone(buzzerPin, 1200, 300);  // 1.2 kHz beep for 300 ms
+    }
+
+  wasAtWin = atWin;
+
+  for (byte i = 0; i < 11; i++) {
+    digitalWrite(ledPins[i], count == states[i] ? HIGH : LOW);
+  }
+}
